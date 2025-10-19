@@ -1,23 +1,30 @@
 #include <stdio.h>
-#define TAB 4
+
+#define TAB 8
 
 int main(void)
 {
-    char c;
-    while ((c = getchar()) != EOF)
+    int c;
+    int counter = 0;
+    
+    while((c = getchar()) != EOF)
     {
-        if (c != '\t')
+        if(c != '\t')
         {
             printf("%c", c);
+            counter ++;
         }
         else
         {
-            for (int i = 0; i < TAB; i++)
+            do
             {
-                putchar(' ');
+            printf(" ");
+            counter ++;
             }
+            while
+            (counter%TAB != 0);
         }
     }
-    printf("\n");
+    
     return 0;
 }
