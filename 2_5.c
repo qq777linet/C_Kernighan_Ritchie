@@ -1,31 +1,20 @@
-#include <stdio.h>
-#include <string.h>
-
-
+// Kernighan&Ritchie 2.5
 int any(char s1[], char s2[])
 {
-    int len1 = strlen(s1);
-    int len2 = strlen(s2);
-    int alarm = 0;
+    int i = 0;
     
-    for(int i = 0; i < len1; i++)
+    while(s1[i] != '\0')
     {
-        for(int j = 0; j < len2; j++)
+        for(int j = 0; s2[j] != '\0'; j++)
         {
             if(s1[i] == s2[j])
             {
-                alarm = 1;
+                return i;
             }
         }
-        if (alarm == 1)
-        {
-            return i;
-            break;
-        }
-        if( i == (len1-1) && alarm == 0)
-        {
-            return -1;
-        }
+        i++;
     }
+    
+    i = (-1);
+    return i;
 }
-
