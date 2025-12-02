@@ -1,33 +1,34 @@
+//Kernighan&Ritchie 3.2
 
-void escape(char s[], char t[])
+void escape(char s[], char t[]) //copies text from t to s, \n \t make visible
 {
-
-    char c;
-    int i = 0;
-    int j = 0;
-    while((c = s[i]) != '\0')
+    for(int i = 0, j = 0; t[i] != '\0'; i++)
     {
-        switch (c)
+        switch (t[i])
         {
-            case '\n':
-                t[j] = '\\';
-                t[j+1] = 'n';
-                i++;
-                j +=2;
+            case '\n' :
+            {
+                s[j] = '\\';
+                j++;
+                s[j] = 'n';
+                j++;
                 break;
-            
-            case '\t':
-                t[j] = '\\';
-                t[j+1] = 't';
-                i++;
-                j +=2;
+            }
+            case '\t' :
+            {
+                s[j] = '\\';
+                j++;
+                s[j] = 't';
+                j++;
                 break;
-            
+            }
             default:
-                t[j] = s[i];
-                i ++;
-                j ++;
+            {
+                s[j] = t[i];
+                j++;
                 break;
+            }
         }
     }
-}
+    s[j] = '\0';
+} 
