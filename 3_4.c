@@ -1,29 +1,24 @@
-void itoa(int n, char s[]) 
+void itoa(int n, char s[])
 {
     int i = 0;
-    int sign = 0;
-    unsigned int num = 0;
-
-    if (n == INT_MIN) 
-    {  
-        num = (unsigned int)INT_MIN;
-    } 
-    else 
-    {
-        sign = n;
-        num = (n < 0) ? -n : n; 
-    }
+    int sign = n;
 
     do 
     {
-        s[i++] = num % 10 + '0';
-    } while ((num /= 10) > 0);
+        int digit = n % 10;   
 
-    if (n < 0) 
+        if (digit < 0) 
+        {
+            digit = -digit;   
+        }
+
+        s[i++] = '0' + digit; 
+    } while ((n /= 10) != 0); 
+    if (sign < 0) 
     {
-        s[i++] = '-';
+        s[i++] = '-';         
     }
 
-    s[i] = '\0';
-    reverse(s);
+    s[i] = '\0';              
+    reverse(s);               
 }
