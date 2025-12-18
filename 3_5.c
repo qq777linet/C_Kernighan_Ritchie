@@ -1,21 +1,34 @@
-#include <math.h>
+//Kernighan&Ritchie 3.5
 
-void itob(int n, char s[], int b) // n is a digit, s is a string, b is formar (decimal, binary or hexadecimal)
+int itob(int n, char s[], int b)
 {
-  int i = 0;
-  if(n == 0)
-  {
-    s[i] = '0';
-  }
-  else
-  {
-    while(n > 0)
+    if((b != 2)&&(b != 8)&&(b != 10)&&(b != 16))
     {
-      s[i] = (n%10) + '0';
-      n = n/10;
-      i++;
+        return 1;
     }
-  }
-  s[i] = '\0';
-  reverse(s);
+    
+    int i = 0;
+    
+    if(b == 10)
+    {
+        int sign = n;
+        unsigned int x = (sign < 0) ? (unsigned int)(-(long long)n) : (unsigned int)n;
+        do
+        {
+            s[i] = '0' + x%10;
+            x /= 10;
+            i++;
+        } while (x != 0);
+        
+        s[i] = '\0';
+        reverse(s);
+        
+    }
+    
+    
+    return 0;
 }
+
+/* pseudocode
+*/
+
