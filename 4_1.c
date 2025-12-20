@@ -1,21 +1,23 @@
+//Kernighan&Ritchie 4.1
+
 int strindex (char s[], char t[])
 {
-  int i, j, k;
-  int current_enter = -1;
-  for (i = 0; s[i] != '\0'; i++) 
-  {
-    for (j = i, k = 0; t[k] != '\0' && s[j] == t[k]; j++, k++)
+    int i, j, k;
+    int temp = (-1);
+    for (i = 0; s[i] != '\0'; i++) 
     {
-      ;
+        for (j = i, k = 0; t[k] != '\0' && s[j] == t[k]; j++, k++)
+        {
+            ;
+        }
+        if (k > 0 && t[k] == '\0')
+        {
+            temp = i;
+        }
     }
-    if (k > 0 && t[k] == '\0')
+    if(temp != (-1))
     {
-      current_enter = i;
+        return temp;
     }
- }
-if(current_enter != -1)
-{
-  return current_enter;
-}
-  return -1;
+    return -1;
 }
