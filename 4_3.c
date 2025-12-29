@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include <stdlib.h> // atof()
 #include <ctype.h>
+#include <math.h>  // fmod
+
 
 #define MAXOP 100 // max size of operand
 #define NUMBER '0' // digit indication
@@ -11,13 +13,15 @@
 int getop (char []);
 void push (double);
 double pop (void);
+int getch(void);
+void ungetch(int);
 
 // calculator with polish entry
 int main(void)
 {
     int type;
     double op2;
-    char s[MAXOP];
+    char s[MAXOP]; //operand
     while ((type = getop (s)) != EOF) 
     {
         switch (type) 
@@ -40,10 +44,23 @@ int main(void)
                 if (op2 != 0.0)
                 {
                     push (pop() / op2);
+                    break;
                 }
                 else
                 {
-                    printf("Error: division by zero\п");
+                    printf("Error: division by zero\n");
+                    break;
+                }
+            case '%' :
+                op2 = pop();
+                if (op2 != 0.0)
+                {
+                    push (fmod(pop(), op2));
+                    break;
+                }
+                else
+                {
+                    printf("Error: division by zero\n");
                     break;
                 }
             case '\n' :
@@ -80,37 +97,34 @@ double pop(void) //returns top of stack
     }
     else 
     {
-        printf( "Error: stack is empty\п");
+        printf( "Error: stack is empty\n");
         return 0.0;
     }
 }
 
-int getch(void);
-void ungetch(int);
-
 int getop(char s[])//gets next operator or operand
 {
-    int i, c;
-    while ((s[0] = с = getch()) == ' ' || с == '\t' )
+    int i, c; //i - counter; c - buffer
+    while ((s[0] = c = getch()) == ' ' || c == '\t' ) //skip spaces and tabulation
     {
         ;
     }
-    s[1] = '\0';
-    if (!isdigit(c) && с != '.')
+    s[1] = '\0'; 
+    if (!isdigit(c) && c != '.')
     {
-        return с; //not digit
+        return c; //not digit
     }
     i = 0;
     if (isdigit(c)) //collects integer part
     {
-        while (isdigit(s[++i] = с = getch()))
+        while (isdigit(s[++i] = c = getch()))
         {
             ;
         }
     }
-    if (с == '.') //collects fractional part
+    if (c == '.') //collects fractional part
     {
-        while (isdigit(s[++i] = с = getch()))
+        while (isdigit(s[++i] = c = getch()))
         {
             ;
         }
@@ -122,3 +136,9 @@ int getop(char s[])//gets next operator or operand
     }
     return NUMBER;
 }
+
+/* pseudocode
+
+- 
+
+*/
