@@ -105,16 +105,34 @@ double pop(void) //returns top of stack
 int getop(char s[])//gets next operator or operand
 {
     int i, c; //i - counter; c - buffer
+    int next = 0; //for '-' handling in getop
     while ((s[0] = c = getch()) == ' ' || c == '\t' ) //skip spaces and tabulation
     {
         ;
     }
     s[1] = '\0'; 
-    if (!isdigit(c) && c != '.')
+    if (!isdigit(c) && c != '.' && c!= '-')
     {
         return c; //not digit
     }
     i = 0;
+    if(c == '-')
+    {
+        next = getch();
+        if(!isdigit(next) && next != '.')
+        {
+            ungetch(next);
+            return c;
+        }
+        else
+        {
+            s[i] = c;
+            i++;
+            s[i] = next;
+            c = next;
+            i++;
+        }
+    }
     if (isdigit(c)) //collects integer part
     {
         while (isdigit(s[++i] = c = getch()))
