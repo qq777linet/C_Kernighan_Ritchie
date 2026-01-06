@@ -74,6 +74,9 @@ int main(void)
                     break;
                 }
             case '=' :
+                op2 = pop();
+                VAR_VAL[temp_index] = op2;
+                VAR_STATUS[temp_index] = true;
                 break;
                 
             case NAME:
@@ -108,9 +111,14 @@ int main(void)
                 }
                 break;
             case VAR:
-                if(VAR_STATUS[atoi(s) - '0'] == TRUE)
+                temp_index = s[0] - 'a';
+                if( VAR_STATUS[s[0] - 'a'] != false)
                 {
-                    push(atof(s));
+                    push(VAR_VAL[s[0] - 'a']);
+                }
+                else
+                {
+                    ;
                 }
                 break;
             case '\n' :
@@ -127,13 +135,8 @@ int main(void)
 int sp = 0; //next position in stack
 double val[ MAXVAL ]; //stack
 double VAR_VAL[26]; // values of variables
-char VAR_ARAY[26]; // array of variable's names
+int temp_index = 0;
 bool VAR_STATUS[26] = {false};
-for(int i = 0; i <26; i++)
-{
-    VAR_ARAY[i] = 97 + i;
-}
-
 void print_stack_top(void)
 {
     if (sp > 0)
