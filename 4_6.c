@@ -1,4 +1,4 @@
-//Kernighan&Ritchie 4.5
+//Kernighan&Ritchie 4.6
 
 #include <stdio.h>
 #include <stdlib.h> // atof()
@@ -33,6 +33,7 @@ int main(void)
     double VAR_VAL[26] = {0.0}; // array of variable's values
     bool VAR_ST[26] = {false}; // array of variable's statuses
     int LAST_VAR = 0; // for variables handling
+    double LAST_PR = 0.0; // for last printed value
     while ((type = getop (s)) != EOF) 
     {
         switch (type) 
@@ -81,16 +82,18 @@ int main(void)
                 pop();
                 VAR_VAL[LAST_VAR] = pop();
                 VAR_ST[LAST_VAR] = true;
+                push(VAR_VAL[LAST_VAR]);
                 break;
             case VAR:
-                if(VAR_ST[atoi(s[0] - 'A')] == true)
+                if(VAR_ST[s[0] - 'a'] == true)
                 {
-                    push(VAR_VAL[atoi(s[0] - 'A')]);
+                    push(VAR_VAL[s[0] - 'a']);
+                    LAST_VAR = s[0] - 'a';
                 }
                 else
                 {
                     push(0.0);
-                    LAST_VAR = atoi(s[0] - 'A');
+                    LAST_VAR = s[0] - 'a';
                 }
                 break;
             case NAME:
@@ -119,13 +122,18 @@ int main(void)
                 { 
                     clean();
                 }
+                else if (strcmp(s, "last") == 0) 
+                { 
+                    push(LAST_PR);
+                }
                 else
                 {
                     printf("Error: unknown function %s\n", s);
                 }
                 break;
             case '\n' :
-                printf("\t%.8g\n", pop());
+                LAST_PR = pop();
+                printf("\t%.8g\n", LAST_PR);
                 break;
             default:
                 printf("Error: unknown operation %s\n", s);
