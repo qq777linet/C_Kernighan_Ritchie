@@ -1,4 +1,4 @@
-//Kernighan&Ritchie 4.6
+//Kernighan&Ritchie 4.5
 
 #include <stdio.h>
 #include <stdlib.h> // atof()
@@ -7,11 +7,12 @@
 #include <string.h>
 #include <stdbool.h>
 
+
 #define MAXOP 100 // max size of operand
 #define NUMBER '0' // digit indication
 #define MAXVAL 100 //max stack depth
 #define NAME 'n'
-#define VAR 'v'
+#define VAR 'v' // for variable
 
 int getop (char []);
 void push (double);
@@ -27,8 +28,11 @@ void clean(void);
 int main(void)
 {
     int type;
-    double op2; //for temporary operand
+    double op2;
     char s[MAXOP]; //operand
+    double VAR_VAL[26] = {0.0}; // array of variable's values
+    bool VAR_ST[26] = {false}; // array of variable's statuses
+    int LAST_VAR = 0; // for variables handling
     while ((type = getop (s)) != EOF) 
     {
         switch (type) 
@@ -74,11 +78,21 @@ int main(void)
                     break;
                 }
             case '=' :
-                op2 = pop();
-                VAR_VAL[temp_index] = op2;
-                VAR_STATUS[temp_index] = true;
+                pop();
+                VAR_VAL[LAST_VAR] = pop();
+                VAR_ST[LAST_VAR] = true;
                 break;
-                
+            case VAR:
+                if(VAR_ST[atoi(s[0] - 'A')] == true)
+                {
+                    push(VAR_VAL[atoi(s[0] - 'A')]);
+                }
+                else
+                {
+                    push(0.0);
+                    LAST_VAR = atoi(s[0] - 'A');
+                }
+                break;
             case NAME:
                 if (strcmp(s, "sin") == 0) 
                 {
@@ -88,37 +102,26 @@ int main(void)
                 {
                     push(exp(pop()));
                 }
-                else if (strcmp(s, "duplicate") == 0) 
-                {
-                    duplicate();
-                }
-                else if (strcmp(s, "swap") == 0) 
-                {
-                    change();
-                }
-                else if (strcmp(s, "clean") == 0) 
-                {
-                    clean();
-                }
                 else if (strcmp(s, "pow") == 0) 
                 { 
                     op2 = pop(); 
                     push(pow(pop(), op2)); 
                 }
+                else if (strcmp(s, "dup") == 0) 
+                { 
+                    duplicate();
+                }
+                else if (strcmp(s, "swap") == 0) 
+                { 
+                    change();
+                }
+                else if (strcmp(s, "clear") == 0) 
+                { 
+                    clean();
+                }
                 else
                 {
                     printf("Error: unknown function %s\n", s);
-                }
-                break;
-            case VAR:
-                temp_index = s[0] - 'a';
-                if( VAR_STATUS[s[0] - 'a'] != false)
-                {
-                    push(VAR_VAL[s[0] - 'a']);
-                }
-                else
-                {
-                    ;
                 }
                 break;
             case '\n' :
@@ -134,9 +137,7 @@ int main(void)
 
 int sp = 0; //next position in stack
 double val[ MAXVAL ]; //stack
-double VAR_VAL[26]; // values of variables
-int temp_index = 0;
-bool VAR_STATUS[26] = {false};
+
 void print_stack_top(void)
 {
     if (sp > 0)
@@ -211,7 +212,7 @@ double pop(void) //returns top of stack
     }
 }
 
-int getop(char s[])//gets next operator or operand
+int getop(char s[])//gets next operator or operand, returns type, stores in char s[]
 {
     int i, c; //i - counter; c - buffer
     int next = 0; //for '-' handling in getop
@@ -229,10 +230,15 @@ int getop(char s[])//gets next operator or operand
             c = getch();
         }
         s[i] = '\0';
-        if (c != EOF)
+        if (c != EOF) 
+        {    
             ungetch(c);
-    
-        return (i == 1) ? VAR : NAME;
+        }
+        if(i == 1)
+        {
+            return VAR;
+        }
+        return NAME;
     }
     if (!isdigit(c) && c != '.' && c!= '-')
     {
@@ -253,12 +259,11 @@ int getop(char s[])//gets next operator or operand
             i++;
             s[i] = next;
             c = next;
-            i++;
         }
     }
     if (isdigit(c)) //collects integer part
     {
-        while (isdigit(s[++i] = c = getch()))
+        while (isdigit(s[++i] = (c = getch())))
         {
             ;
         }
@@ -280,9 +285,6 @@ int getop(char s[])//gets next operator or operand
 
 /* pseudocode
 
-- make array of names of variables
-- make array of doubles where values of variables are stored
-- changed getop (returns VAR)
-- case = 
-- case var 
+- 
+
 */
