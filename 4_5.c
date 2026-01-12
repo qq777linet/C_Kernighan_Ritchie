@@ -48,15 +48,6 @@ int main(void)
             case '?':
                 print_stack_top();
                 break;
-            case 'w':
-                duplicate();
-                break;
-            case 's':
-                change();
-                break;
-            case 'c':
-                clean();
-                break;
             case '/' :
                 op2 = pop();
                 if (op2 != 0.0)
@@ -94,6 +85,18 @@ int main(void)
                 { 
                     op2 = pop(); 
                     push(pow(pop(), op2)); 
+                }
+                else if (strcmp(s, "dup") == 0) 
+                { 
+                    duplicate();
+                }
+                else if (strcmp(s, "swap") == 0) 
+                { 
+                    change();
+                }
+                else if (strcmp(s, "clear") == 0) 
+                { 
+                    clean();
                 }
                 else
                 {
@@ -188,7 +191,7 @@ double pop(void) //returns top of stack
     }
 }
 
-int getop(char s[])//gets next operator or operand
+int getop(char s[])//gets next operator or operand, returns type, stores in char s[]
 {
     int i, c; //i - counter; c - buffer
     int next = 0; //for '-' handling in getop
@@ -231,12 +234,11 @@ int getop(char s[])//gets next operator or operand
             i++;
             s[i] = next;
             c = next;
-            i++;
         }
     }
     if (isdigit(c)) //collects integer part
     {
-        while (isdigit(s[++i] = c = getch()))
+        while (isdigit(s[++i] = (c = getch())))
         {
             ;
         }
