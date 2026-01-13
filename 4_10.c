@@ -39,12 +39,13 @@ int getop(char s[], char buffer[])//gets next operator or operand, returns type,
     }
     if(buffer[pos] == '\n') 
     {
+        pos++;
         return '\n';
     }
     
     if(isalpha(buffer[pos]))
     {
-        if(buffer[pos+1] == ' ') //handling variables
+        if(buffer[pos+1] == ' ' || ) //handling variables
         {
             s[0] = tolower(buffer[pos]);
             s[1] = '\0';
@@ -52,7 +53,7 @@ int getop(char s[], char buffer[])//gets next operator or operand, returns type,
         }
         else //handling strings
         {
-            while(buffer[pos] != ' ')
+            while(buffer[pos] != ' ' && buffer[pos] != '\n')
             {
                 s[i] = buffer[pos];
                 i++;
@@ -73,7 +74,7 @@ int getop(char s[], char buffer[])//gets next operator or operand, returns type,
         }
         else
         {
-            while(buffer[pos] != ' ')
+            while(buffer[pos] != ' ' && buffer[pos] != '\n')
             {
                 s[i] = buffer[pos];
                 i++;
@@ -85,7 +86,7 @@ int getop(char s[], char buffer[])//gets next operator or operand, returns type,
     }
     if(isdigit(buffer[pos]))
     {
-        while(buffer[pos] != ' ')
+        while(buffer[pos] != ' ' && buffer[pos] != '\n')
             {
                 s[i] = buffer[pos];
                 i++;
