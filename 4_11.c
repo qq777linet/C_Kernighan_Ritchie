@@ -1,10 +1,14 @@
-//Kernighan&Ritchie 4.11
+//Kernighan&Ritchie 4.11 - uses static variable, does not use ungetch()
 
 int getop(char s[])//gets next operator or operand, returns type, stores in char s[]
 {
+    #define GET (flag == 0)?(getch()):(flag = 0, temp)
+    #define UNGET(x) (flag = 1, temp = x)
+    static int temp = 0;
+    static int flag = 0;
     int i, c; //i - counter; c - buffer
     int next = 0; //for '-' handling in getop
-    while ((s[0] = c = getch()) == ' ' || c == '\t' ) //skip spaces and tabulation
+    while ((s[0] = (c = GET)) == ' ' || c == '\t' ) //skip spaces and tabulation
     {
         ;
     }
@@ -15,12 +19,12 @@ int getop(char s[])//gets next operator or operand, returns type, stores in char
         while (isalpha((unsigned char)c)) 
         {
             s[i++] = c;
-            c = getch();
+            c = GET;
         }
         s[i] = '\0';
         if (c != EOF) 
         {    
-            ungetch(c);
+            UNGET(c);
         }
         if(i == 1)
         {
@@ -35,10 +39,10 @@ int getop(char s[])//gets next operator or operand, returns type, stores in char
     i = 0;
     if(c == '-')
     {
-        next = getch();
+        next = GET;
         if(!isdigit(next) && next != '.')
         {
-            ungetch(next);
+            UNGET(next);
             return c;
         }
         else
@@ -51,14 +55,14 @@ int getop(char s[])//gets next operator or operand, returns type, stores in char
     }
     if (isdigit(c)) //collects integer part
     {
-        while (isdigit(s[++i] = (c = getch())))
+        while (isdigit(s[++i] = (c = GET)))
         {
             ;
         }
     }
     if (c == '.') //collects fractional part
     {
-        while (isdigit(s[++i] = c = getch()))
+        while (isdigit(s[++i] = c = GET))
         {
             ;
         }
@@ -66,7 +70,7 @@ int getop(char s[])//gets next operator or operand, returns type, stores in char
     s[i] = '\0';
     if (c != EOF)
     {
-        ungetch(c);
+        UNGET(c);
     }
     return NUMBER;
 }
