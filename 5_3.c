@@ -1,11 +1,20 @@
+
+// Kernighan&Ritchie 5.3 
+
+#include<stdio.h>
+
+//copies string t to end of string s
 void strcat(char* s, char* t)
 {
-  int length_1 = strlen(s);
-  int length_2 = strlen(t);
-  for(int i = 0; i <= length_2; i++)
-  {
-    s[length_1 + i] = t[i];
-  }
-  s[length_1 + length_2] = '\0';
-  
-}  
+    while(*s != '\0')
+    {
+        s++;
+    }
+    while(*t != '\0')
+    {
+        *s = *t;
+        s++;
+        t++;
+    }
+    *s = '\0';
+}
